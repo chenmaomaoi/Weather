@@ -4,6 +4,7 @@ using System.Device.I2c;
 using System.IO.Ports;
 using System.Threading;
 using Iot.Device.Bmxx80;
+using Iot.Device.Bmxx80.ReadResult;
 using Iot.Device.CharacterLcd;
 using Iot.Device.Common;
 using Iot.Device.Sht3x;
@@ -71,6 +72,7 @@ namespace Weather.Services
 
             lcd1602.BacklightOn = true;
             lcd1602.DisplayOn = true;
+            lcd1602.Clear();
 
             bmp280.TemperatureSampling = Sampling.UltraHighResolution;
             bmp280.PressureSampling = Sampling.UltraHighResolution;
@@ -89,13 +91,11 @@ namespace Weather.Services
             ledBlink.Dark();
 
             //关闭显示器
-            lcd1602.Clear();
             lcd1602.BacklightOn = false;
             lcd1602.DisplayOn = false;
 
-            bmp280.TemperatureSampling = Sampling.Skipped;
-            bmp280.PressureSampling = Sampling.Skipped;
-            bmp280.FilterMode = Iot.Device.Bmxx80.FilteringMode.Bmx280FilteringMode.Off;
+            bmp280.TemperatureSampling = Sampling.UltraLowPower;
+            bmp280.PressureSampling = Sampling.UltraLowPower;
 
             sht30.Resolution = Resolution.Low;
             sht30.Heater = false;
@@ -109,24 +109,30 @@ namespace Weather.Services
             Thread.Sleep(10);
             ledBlink.Dark();
 
+            Bmp280ReadResult bmp280result = bmp280.Read();
+
             DataDto data = new DataDto()
             {
-                BMP280 = bmp280.Read(),
+                BMP280 = new()
+                {
+                    Temperature = (float)bmp280result.Temperature.DegreesCelsius,
+                    Pressure = (float)bmp280result.Pressure.Hectopascals
+                },
                 SHT30 = new DataDto.SHT30Result()
                 {
-                    Temperature = sht30.Temperature,
-                    RelativeHumidity = sht30.Humidity
+                    Temperature = (float)sht30.Temperature.DegreesCelsius,
+                    RelativeHumidity = (float)sht30.Humidity.Percent
                 }
             };
 
             sht30.Heater = true;
 
             lcd1602.Home();
-            lcd1602.Write($"T:{data.SHT30.Temperature.DegreesCelsius.ToString("F1")}\x1 ");
-            lcd1602.Write($"RH:{data.SHT30.RelativeHumidity.Percent.ToString("F1")}% ");
+            lcd1602.Write($"T:{data.SHT30.Temperature.ToString("F1")}\x1 ");
+            lcd1602.Write($"RH:{data.SHT30.RelativeHumidity.ToString("F1")}% ");
             lcd1602.SetCursorPosition(0, 1);
-            lcd1602.Write($"{data.BMP280.Pressure.Hectopascals.ToString("F1")}hPa ");
-            lcd1602.Write($"{WeatherHelper.CalculateAltitude(data.BMP280.Pressure, data.BMP280.Temperature).Meters.ToString("F1")}m ");
+            lcd1602.Write($"{data.BMP280.Pressure.ToString("F1")}hPa ");
+            lcd1602.Write($"{WeatherHelper.CalculateAltitude(bmp280result.Pressure, bmp280result.Temperature).Meters.ToString("F1")}m ");
 
             //蓝牙已连接，发送数据
             if (device.BLE_State.Read() == PinValue.High)
