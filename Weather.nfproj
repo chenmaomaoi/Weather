@@ -18,16 +18,24 @@
   </PropertyGroup>
   <Import Project="$(NanoFrameworkProjectSystemPath)NFProjectSystem.props" Condition="Exists('$(NanoFrameworkProjectSystemPath)NFProjectSystem.props')" />
   <ItemGroup>
+    <Compile Include="GPIOConfigs.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\ApplicationService.cs" />
+    <Compile Include="Services\ButtonService.cs" />
+    <Compile Include="Services\DeviceService.cs" />
     <Compile Include="Services\Extensions\DependencyAttribute\HostedDependencyAttribute.cs" />
     <Compile Include="Services\Extensions\DependencyAttribute\SingletonDependencyAttribute.cs" />
     <Compile Include="Services\Extensions\DependencyAttribute\TransientDependencyAttribute.cs" />
     <Compile Include="Services\Extensions\ServiceCollectionExtensions.cs" />
+    <Compile Include="Services\LEDBlinkService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Iot.Device.Bmxx80">
       <HintPath>packages\nanoFramework.Iot.Device.Bmxx80.1.2.329\lib\Iot.Device.Bmxx80.dll</HintPath>
+    </Reference>
+    <Reference Include="Iot.Device.Button">
+      <HintPath>packages\nanoFramework.Iot.Device.Button.1.2.329\lib\Iot.Device.Button.dll</HintPath>
     </Reference>
     <Reference Include="Iot.Device.CharacterLcd">
       <HintPath>packages\nanoFramework.Iot.Device.CharacterLcd.1.1.246\lib\Iot.Device.CharacterLcd.dll</HintPath>

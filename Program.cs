@@ -1,6 +1,4 @@
 using System;
-using System.Diagnostics;
-using System.Threading;
 using nanoFramework.Hosting;
 using Weather.Services.Extensions;
 
@@ -8,20 +6,23 @@ namespace Weather
 {
     public class Program
     {
+        public static IHost host;
+
         public static void Main()
         {
             try
             {
-                Host.CreateDefaultBuilder()
-                    .ConfigureServices(services => services.AddServices())
-                    .Build()
-                    .Run();
+                host = Host.CreateDefaultBuilder()
+                     .ConfigureServices(services => services.AddServices())
+                     .Build();
+                host.Run();
+
             }
             catch (Exception ex)
             {
-                Debug.WriteLine("Error:");
-                Debug.WriteLine(ex.StackTrace);
-                Debug.WriteLine(ex.Message);
+                Console.WriteLine("Error:");
+                Console.WriteLine(ex.StackTrace);
+                Console.WriteLine(ex.Message);
             }
         }
     }
