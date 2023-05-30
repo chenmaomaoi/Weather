@@ -103,7 +103,7 @@ namespace Weather.Services
 
             blePort.Close();
 
-            Sleep.StartDeepSleep();
+            Sleep.StartLightSleep();
         }
 
         protected override void ExecuteAsync()
