@@ -1,4 +1,5 @@
 using System;
+using nanoFramework.Hardware.Esp32;
 using nanoFramework.Hosting;
 using Weather.Services.Extensions;
 
@@ -10,19 +11,12 @@ namespace Weather
 
         public static void Main()
         {
-            try
-            {
-                host = Host.CreateDefaultBuilder()
+            Sleep.EnableWakeupByPin(Sleep.WakeupGpioPin.Pin0, 0);
+
+            host ??= Host.CreateDefaultBuilder()
                      .ConfigureServices(services => services.AddServices())
                      .Build();
-                host.Run();
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error:");
-                Console.WriteLine(ex.StackTrace);
-                Console.WriteLine(ex.Message);
-            }
+            host.Run();
         }
     }
 }

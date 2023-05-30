@@ -8,6 +8,7 @@ using Iot.Device.Bmxx80.ReadResult;
 using Iot.Device.CharacterLcd;
 using Iot.Device.Common;
 using Iot.Device.Sht3x;
+using nanoFramework.Hardware.Esp32;
 using nanoFramework.Hosting;
 using nanoFramework.Json;
 using Weather.Services.Extensions.DependencyAttribute;
@@ -26,11 +27,19 @@ namespace Weather.Services
         private readonly SerialPort blePort;
 
         public ApplicationService(Device device, ButtonService buttonService, LEDBlinkService ledBlink)
-            : base(TimeSpan.FromSeconds(2))
+            : base(TimeSpan.FromSeconds(1))
         {
             this.device = device;
             this.buttonService = buttonService;
             this.ledBlink = ledBlink;
+
+            //BMP280
+            I2cDevice i2cBmp280Device = I2cDevice.Create(new I2cConnectionSettings(1, 0x76, I2cBusSpeed.FastModePlus));
+            bmp280 = new Bmp280(i2cBmp280Device);
+
+            //SHT30
+            I2cDevice i2cSht3xDevice = I2cDevice.Create(new I2cConnectionSettings(1, 0x44, I2cBusSpeed.FastModePlus));
+            sht30 = new Sht3x(i2cSht3xDevice);
 
             //LCD1602
             I2cDevice i2cLcdDevice = I2cDevice.Create(new I2cConnectionSettings(1, 0x27, I2cBusSpeed.FastModePlus));
@@ -38,7 +47,7 @@ namespace Weather.Services
             lcd1602 = new Lcd1602(lcdInterface)
             {
                 UnderlineCursorVisible = false,
-                BacklightOn = true
+                BacklightOn = false
             };
             //摄氏度字符
             byte[] charCelsius = new byte[8]
@@ -54,14 +63,6 @@ namespace Weather.Services
             };
             lcd1602.CreateCustomCharacter(1, charCelsius);
 
-            //BMP280
-            I2cDevice i2cBmp280Device = I2cDevice.Create(new I2cConnectionSettings(1, 0x76, I2cBusSpeed.FastModePlus));
-            bmp280 = new Bmp280(i2cBmp280Device);
-
-            //SHT30
-            I2cDevice i2cSht3xDevice = I2cDevice.Create(new I2cConnectionSettings(1, 0x44, I2cBusSpeed.FastModePlus));
-            sht30 = new Sht3x(i2cSht3xDevice);
-
             //蓝牙串口
             blePort = new SerialPort("COM2", 115200);
         }
@@ -70,7 +71,7 @@ namespace Weather.Services
         {
             base.Start();
 
-            lcd1602.BacklightOn = true;
+            lcd1602.BacklightOn = false;
             lcd1602.DisplayOn = true;
             lcd1602.Clear();
 
@@ -91,7 +92,7 @@ namespace Weather.Services
             ledBlink.Dark();
 
             //关闭显示器
-            lcd1602.BacklightOn = false;
+            //lcd1602.BacklightOn = false;
             lcd1602.DisplayOn = false;
 
             bmp280.TemperatureSampling = Sampling.UltraLowPower;
@@ -101,12 +102,14 @@ namespace Weather.Services
             sht30.Heater = false;
 
             blePort.Close();
+
+            Sleep.StartDeepSleep();
         }
 
         protected override void ExecuteAsync()
         {
             ledBlink.Bright();
-            Thread.Sleep(10);
+            Thread.Sleep(0);
             ledBlink.Dark();
 
             Bmp280ReadResult bmp280result = bmp280.Read();

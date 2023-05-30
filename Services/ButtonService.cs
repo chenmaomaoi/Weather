@@ -1,5 +1,6 @@
 ﻿using System;
 using Iot.Device.Button;
+using nanoFramework.Hardware.Esp32;
 using Weather.Services.Extensions.DependencyAttribute;
 
 namespace Weather.Services
