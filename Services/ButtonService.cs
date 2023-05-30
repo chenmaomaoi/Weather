@@ -13,7 +13,7 @@ namespace Weather.Services
         private readonly GpioButton button;
         private bool isEnable;
 
-        public ButtonService(DeviceService device)
+        public ButtonService(Device device)
         {
             button = device.Button;
             isEnable = true;

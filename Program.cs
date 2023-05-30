@@ -16,7 +16,6 @@ namespace Weather
                      .ConfigureServices(services => services.AddServices())
                      .Build();
                 host.Run();
-
             }
             catch (Exception ex)
             {
