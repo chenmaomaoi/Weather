@@ -71,6 +71,8 @@ namespace Weather.Services
         {
             base.Start();
 
+            ledBlink.StartBlinkAsync(0, 3000);
+
             lcd1602.BacklightOn = false;
             lcd1602.DisplayOn = true;
             lcd1602.Clear();
@@ -89,7 +91,7 @@ namespace Weather.Services
         {
             base.Stop();
 
-            ledBlink.Dark();
+            //ledBlink.StopBlink();
 
             //关闭显示器
             //lcd1602.BacklightOn = false;
@@ -108,9 +110,9 @@ namespace Weather.Services
 
         protected override void ExecuteAsync()
         {
-            ledBlink.Bright();
-            Thread.Sleep(0);
-            ledBlink.Dark();
+            //ledBlink.Bright();
+            //Thread.Sleep(0);
+            //ledBlink.Dark();
 
             Bmp280ReadResult bmp280result = bmp280.Read();
 
