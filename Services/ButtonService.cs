@@ -1,6 +1,5 @@
 ﻿using System;
 using Iot.Device.Button;
-using nanoFramework.Hardware.Esp32;
 using Weather.Services.Extensions.DependencyAttribute;
 
 namespace Weather.Services
@@ -8,7 +7,7 @@ namespace Weather.Services
     /// <summary>
     /// 板载按钮服务
     /// </summary>
-    [SingletonDependency]
+    //[SingletonDependency]
     public class ButtonService
     {
         private readonly GpioButton button;
@@ -16,7 +15,7 @@ namespace Weather.Services
 
         public ButtonService(Device device)
         {
-            button = device.Button;
+            //button = device.btnButton;
             isEnable = true;
             button.Press += button_Press;
         }

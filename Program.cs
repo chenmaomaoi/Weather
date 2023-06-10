@@ -1,4 +1,3 @@
-using System;
 using nanoFramework.Hardware.Esp32;
 using nanoFramework.Hosting;
 using Weather.Services.Extensions;

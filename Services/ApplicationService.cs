@@ -2,9 +2,9 @@
 using System.Device.Gpio;
 using System.Device.I2c;
 using System.IO.Ports;
-using System.Threading;
 using Iot.Device.Bmxx80;
 using Iot.Device.Bmxx80.ReadResult;
+using Iot.Device.Button;
 using Iot.Device.CharacterLcd;
 using Iot.Device.Common;
 using Iot.Device.Sht3x;
@@ -19,18 +19,20 @@ namespace Weather.Services
     public class ApplicationService : SchedulerService
     {
         private readonly Device device;
-        private readonly ButtonService buttonService;
+        //private readonly ButtonService buttonService;
         private readonly LEDBlinkService ledBlink;
         private readonly Lcd1602 lcd1602;
         private readonly Bmp280 bmp280;
         private readonly Sht3x sht30;
         private readonly SerialPort blePort;
 
-        public ApplicationService(Device device, ButtonService buttonService, LEDBlinkService ledBlink)
+        private readonly GpioButton btnSetLandmark;
+
+        public ApplicationService(Device device, LEDBlinkService ledBlink)
             : base(TimeSpan.FromSeconds(1))
         {
             this.device = device;
-            this.buttonService = buttonService;
+            //this.buttonService = buttonService;
             this.ledBlink = ledBlink;
 
             //BMP280
@@ -65,6 +67,16 @@ namespace Weather.Services
 
             //蓝牙串口
             blePort = new SerialPort("COM2", 115200);
+
+            btnSetLandmark = device.btnSetLandmark;
+            btnSetLandmark.Press += BtnSetLandmark_Press;
+        }
+
+        private void BtnSetLandmark_Press(object sender, EventArgs e)
+        {
+            Bmp280ReadResult bmp280result = bmp280.Read();
+            double hight = WeatherHelper.CalculateAltitude(bmp280result.Pressure, bmp280result.Temperature).Meters;
+            Settings.Hight = hight;
         }
 
         public override void Start()
@@ -79,7 +91,7 @@ namespace Weather.Services
 
             bmp280.TemperatureSampling = Sampling.UltraHighResolution;
             bmp280.PressureSampling = Sampling.UltraHighResolution;
-            bmp280.FilterMode = Iot.Device.Bmxx80.FilteringMode.Bmx280FilteringMode.X2;
+            bmp280.FilterMode = Iot.Device.Bmxx80.FilteringMode.Bmx280FilteringMode.X4;
 
             sht30.Resolution = Resolution.High;
             sht30.Heater = true;
@@ -137,7 +149,10 @@ namespace Weather.Services
             lcd1602.Write($"RH:{data.SHT30.RelativeHumidity.ToString("F1")}% ");
             lcd1602.SetCursorPosition(0, 1);
             lcd1602.Write($"{data.BMP280.Pressure.ToString("F1")}hPa ");
-            lcd1602.Write($"{WeatherHelper.CalculateAltitude(bmp280result.Pressure, bmp280result.Temperature).Meters.ToString("F1")}m ");
+
+            double hight = WeatherHelper.CalculateAltitude(bmp280result.Pressure, bmp280result.Temperature).Meters;
+
+            lcd1602.Write($"{(hight - Settings.Hight).ToString("F1")}m   ");
 
             //蓝牙已连接，发送数据
             if (device.BLE_State.Read() == PinValue.High)

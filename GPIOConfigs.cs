@@ -24,5 +24,10 @@ namespace Weather
         public const int BLE_TX = Gpio.IO26;
         public const int BLE_State = Gpio.IO04;
         #endregion
+
+        /// <summary>
+        /// 设置原点按钮
+        /// </summary>
+        public const int SetLandmark = Gpio.IO00;
     }
 }

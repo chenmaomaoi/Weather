@@ -11,23 +11,28 @@ namespace Weather.Services
         /// <summary>
         /// 板载指示灯
         /// </summary>
-        public GpioPin Light;
+        public GpioPin ledLight;
 
         /// <summary>
         /// 板载按钮
         /// </summary>
-        public GpioButton Button;
+        //public GpioButton btnButton;
 
         /// <summary>
         /// BLE连接状态
         /// </summary>
         public GpioPin BLE_State;
 
+        /// <summary>
+        /// 设置原点按钮
+        /// </summary>
+        public GpioButton btnSetLandmark;
+
         public Device()
         {
-            Light = new GpioController().OpenPin(GPIOConfigs.OnBoardLigth, PinMode.Output);
+            ledLight = new GpioController().OpenPin(GPIOConfigs.OnBoardLigth, PinMode.Output);
 
-            Button = new GpioButton(GPIOConfigs.OnBoardButton);
+            //btnButton = new GpioButton(GPIOConfigs.OnBoardButton);
 
             #region IIC
             Configuration.SetPinFunction(GPIOConfigs.IIC_SCL, DeviceFunction.I2C1_CLOCK);
@@ -39,6 +44,8 @@ namespace Weather.Services
             Configuration.SetPinFunction(GPIOConfigs.BLE_TX, DeviceFunction.COM2_TX);
             BLE_State = new GpioController().OpenPin(GPIOConfigs.BLE_State, PinMode.Input);
             #endregion
+
+            btnSetLandmark = new GpioButton(GPIOConfigs.SetLandmark);
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using Iot.Device.Bmxx80.ReadResult;
-
-namespace Weather.Services
+﻿namespace Weather.Services
 {
     public class DataDto
     {

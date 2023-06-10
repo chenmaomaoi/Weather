@@ -28,7 +28,7 @@ namespace Weather.Services
 
         public LEDBlinkService(Device device)
         {
-            Light = device.Light;
+            Light = device.ledLight;
             new GpioController().SetPinMode(Light.PinNumber, PinMode.Output);
 
             signalStop = false;
