@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using nanoFramework.Hardware.Esp32;
 using nanoFramework.Hosting;
 using Weather.Services.Extensions;
@@ -10,7 +11,7 @@ namespace Weather
 
         public static void Main()
         {
-            Sleep.EnableWakeupByPin(Sleep.WakeupGpioPin.Pin0, 0);
+            Sleep.EnableWakeupByPin(GPIOConfigs.pinWakeup, 0);
 
             host ??= Host.CreateDefaultBuilder()
                      .ConfigureServices(services => services.AddServices())
