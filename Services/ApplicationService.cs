@@ -28,7 +28,7 @@ namespace Weather.Services
             this.device = device;
             this.ledBlink = ledBlink;
 
-            device.btnOnBoard.Press += BtnSetLandmark_Press;
+            device.btnOnBoard.Press += BtnOnBoard_Press;
             device.btnOnBoard.Holding += BtnOnBoard_Holding;
 
             isRunning = true;
@@ -42,7 +42,7 @@ namespace Weather.Services
             Program.host.Stop();
         }
 
-        private void BtnSetLandmark_Press(object sender, EventArgs e)
+        private void BtnOnBoard_Press(object sender, EventArgs e)
         {
             ledBlink.Bright();
             Thread.Sleep(50);
