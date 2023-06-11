@@ -16,29 +16,48 @@ namespace Weather.Services
     public class ApplicationService : SchedulerService
     {
         private readonly Device device;
-        private readonly SleepButtonService sleepButtonService;
         private readonly LEDBlinkService ledBlink;
 
-        private static bool isRunning;
+        private bool isRunning;
 
-        public ApplicationService(Device device, SleepButtonService sleepButtonService, LEDBlinkService ledBlink)
+        private bool isHolding;
+
+        public ApplicationService(Device device, LEDBlinkService ledBlink)
             : base(TimeSpan.FromSeconds(1))
         {
             this.device = device;
-            this.sleepButtonService = sleepButtonService;
             this.ledBlink = ledBlink;
 
-            device.btnSetLandmark.Press += BtnSetLandmark_Press;
+            device.btnOnBoard.Press += BtnSetLandmark_Press;
+            device.btnOnBoard.Holding += BtnOnBoard_Holding;
 
             isRunning = true;
+
+            isHolding = false;
+        }
+
+        private void BtnOnBoard_Holding(object sender, Iot.Device.Button.ButtonHoldingEventArgs e)
+        {
+            isHolding = true;
+            Program.host.Stop();
         }
 
         private void BtnSetLandmark_Press(object sender, EventArgs e)
         {
+            ledBlink.Bright();
+            Thread.Sleep(50);
+            ledBlink.Dark();
+
+            if (isHolding)
+            {
+                return;
+            }
+
             if (isRunning == false)
             {
                 isRunning = true;
                 Program.host.Start();
+
                 return;
             }
 
@@ -69,9 +88,12 @@ namespace Weather.Services
 
         public override void Stop()
         {
-            base.Stop();
+            ledBlink.Bright();
+            Thread.Sleep(1000);
 
             ledBlink.StopBlink();
+            isRunning = false;
+            base.Stop();
 
             //关闭显示器
             //lcd1602.BacklightOn = false;
@@ -84,10 +106,13 @@ namespace Weather.Services
             device.sht30.Heater = false;
 
             device.blePort.Close();
+            ledBlink.Dark();
 
-            isRunning = false;
-            Thread.Sleep(100);
-            Sleep.StartLightSleep();
+            new Timer((o) =>
+            {
+                isHolding = false;
+                Sleep.StartLightSleep();
+            }, new object(), TimeSpan.FromMilliseconds(50), TimeSpan.Zero);
         }
 
         protected override void ExecuteAsync()

@@ -19,14 +19,9 @@ namespace Weather.Services
         public GpioPin ledOnBoardLight;
 
         /// <summary>
-        /// 睡眠按钮
+        /// 板载按钮 设置原点(长按休眠)
         /// </summary>
-        public GpioButton btnSleep;
-
-        /// <summary>
-        /// 设置原点按钮
-        /// </summary>
-        public GpioButton btnSetLandmark;
+        public GpioButton btnOnBoard;
 
         /// <summary>
         /// LCD1602
@@ -57,7 +52,10 @@ namespace Weather.Services
         {
             ledOnBoardLight = new GpioController().OpenPin(GPIOConfigs.ledOnBoardLigth, PinMode.Output);
 
-            btnSleep = new GpioButton(GPIOConfigs.btnSleep);
+            btnOnBoard = new GpioButton(GPIOConfigs.btnOnBoard)
+            {
+                IsHoldingEnabled = true
+            };
 
             #region IIC
             Configuration.SetPinFunction(GPIOConfigs.IIC_SCL, DeviceFunction.I2C1_CLOCK);
@@ -69,8 +67,6 @@ namespace Weather.Services
             Configuration.SetPinFunction(GPIOConfigs.BLE_TX, DeviceFunction.COM2_TX);
             bleState = new GpioController().OpenPin(GPIOConfigs.BLE_State, PinMode.Input);
             #endregion
-
-            btnSetLandmark = new GpioButton(GPIOConfigs.btnSetLandmark);
 
             //BMP280
             I2cDevice i2cBmp280Device = I2cDevice.Create(new I2cConnectionSettings(1, 0x76, I2cBusSpeed.FastModePlus));

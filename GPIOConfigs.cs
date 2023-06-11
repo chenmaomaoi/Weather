@@ -5,14 +5,9 @@ namespace Weather
     public static class GPIOConfigs
     {
         /// <summary>
-        /// 设置原点按钮
+        /// 板载按钮 设置原点(长按休眠)
         /// </summary>
-        public const int btnSetLandmark = Gpio.IO00;
-
-        /// <summary>
-        /// 睡眠按钮
-        /// </summary>
-        public const int btnSleep = Gpio.IO13;
+        public const int btnOnBoard = Gpio.IO00;
 
         /// <summary>
         /// 唤醒按钮
