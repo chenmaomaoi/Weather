@@ -5,7 +5,6 @@ using Iot.Device.Bmxx80;
 using Iot.Device.Bmxx80.ReadResult;
 using Iot.Device.Common;
 using Iot.Device.Sht3x;
-using nanoFramework.Hardware.Esp32;
 using nanoFramework.Hosting;
 using nanoFramework.Json;
 using Weather.Services.Extensions.DependencyAttribute;
@@ -16,54 +15,17 @@ namespace Weather.Services
     public class ApplicationService : SchedulerService
     {
         private readonly Device device;
-        private readonly LEDBlinkService ledBlink;
 
-        private bool isRunning;
+        private readonly LEDBlinkService blinkService;
+        private readonly OnBoardButtonService onBoardButtonService;
 
-        private bool isHolding;
-
-        public ApplicationService(Device device, LEDBlinkService ledBlink)
+        public ApplicationService(Device device, LEDBlinkService blinkService, OnBoardButtonService onBoardButtonService)
             : base(TimeSpan.FromSeconds(1))
         {
             this.device = device;
-            this.ledBlink = ledBlink;
 
-            device.btnOnBoard.Press += BtnOnBoard_Press;
-            device.btnOnBoard.Holding += BtnOnBoard_Holding;
-
-            isRunning = true;
-
-            isHolding = false;
-        }
-
-        private void BtnOnBoard_Holding(object sender, Iot.Device.Button.ButtonHoldingEventArgs e)
-        {
-            isHolding = true;
-            Program.host.Stop();
-        }
-
-        private void BtnOnBoard_Press(object sender, EventArgs e)
-        {
-            ledBlink.Bright();
-            Thread.Sleep(50);
-            ledBlink.Dark();
-
-            if (isHolding)
-            {
-                return;
-            }
-
-            if (isRunning == false)
-            {
-                isRunning = true;
-                Program.host.Start();
-
-                return;
-            }
-
-            Bmp280ReadResult bmp280result = device.bmp280.Read();
-            double hight = WeatherHelper.CalculateAltitude(bmp280result.Pressure, bmp280result.Temperature).Meters;
-            Settings.Hight = hight;
+            this.blinkService = blinkService;
+            this.onBoardButtonService = onBoardButtonService;
         }
 
         public override void Start()
@@ -83,17 +45,17 @@ namespace Weather.Services
 
             device.blePort.Open();
 
-            isRunning = true;
+            Program.IsRunning = true;
         }
 
         public override void Stop()
         {
-            ledBlink.Bright();
+            blinkService.Bright();
             Thread.Sleep(1000);
-
-            ledBlink.StopBlink();
-            isRunning = false;
+            blinkService.StopBlink();
             base.Stop();
+
+            Program.IsRunning = false;
 
             //关闭显示器
             //lcd1602.BacklightOn = false;
@@ -106,24 +68,19 @@ namespace Weather.Services
             device.sht30.Heater = false;
 
             device.blePort.Close();
-            ledBlink.Dark();
 
-            new Timer((o) =>
-            {
-                isHolding = false;
-                Sleep.StartLightSleep();
-            }, new object(), TimeSpan.FromMilliseconds(50), TimeSpan.Zero);
+            blinkService.Dark();
         }
 
         protected override void ExecuteAsync()
         {
-            ledBlink.Bright();
+            blinkService.Bright();
             Thread.Sleep(0);
-            ledBlink.Dark();
+            blinkService.Dark();
 
             Bmp280ReadResult bmp280result = device.bmp280.Read();
 
-            DataDto data = new DataDto()
+            DataDto data = new()
             {
                 BMP280 = new()
                 {
@@ -154,6 +111,8 @@ namespace Weather.Services
             {
                 device.blePort.WriteLine(JsonConvert.SerializeObject(data));
             }
+
+            GC.WaitForPendingFinalizers();
         }
     }
 }

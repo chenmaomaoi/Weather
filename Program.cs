@@ -6,7 +6,9 @@ namespace Weather
 {
     public class Program
     {
-        public static IHost host;
+        public static IHost host = null;
+
+        public static bool IsRunning = false;
 
         public static void Main()
         {

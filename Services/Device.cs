@@ -54,7 +54,8 @@ namespace Weather.Services
 
             btnOnBoard = new GpioButton(GPIOConfigs.btnOnBoard)
             {
-                IsHoldingEnabled = true
+                IsHoldingEnabled = true,
+                IsDoublePressEnabled = true
             };
 
             #region IIC
