@@ -106,6 +106,7 @@ namespace Weather.Services
             //蓝牙串口
             blePort = new SerialPort("COM2", 115200);
             
+
         }
     }
 }
