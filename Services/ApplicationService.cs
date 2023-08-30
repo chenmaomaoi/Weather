@@ -97,8 +97,8 @@ namespace Weather.Services
             device.sht30.Heater = true;
 
             device.lcd1602.Home();
-            device.lcd1602.Write($"T:{data.BMP280.Temperature.ToString("F1")}\x1 ");
-            device.lcd1602.Write($"RH:{data.SHT30.RelativeHumidity.ToString("F1")}% ");
+            device.lcd1602.Write($"{data.BMP280.Temperature.ToString("F1")}\x1 ");
+            device.lcd1602.Write($"{data.SHT30.RelativeHumidity.ToString("F1")}% ");
             device.lcd1602.SetCursorPosition(0, 1);
             device.lcd1602.Write($"{data.BMP280.Pressure.ToString("F1")}hPa ");
 
