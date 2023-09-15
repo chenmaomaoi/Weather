@@ -34,7 +34,7 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Iot.Device.Bmxx80">
-      <HintPath>packages\nanoFramework.Iot.Device.Bmxx80.1.2.378\lib\Iot.Device.Bmxx80.dll</HintPath>
+      <HintPath>packages\nanoFramework.Iot.Device.Bmxx80.1.2.384\lib\Iot.Device.Bmxx80.dll</HintPath>
     </Reference>
     <Reference Include="Iot.Device.Button">
       <HintPath>packages\nanoFramework.Iot.Device.Button.1.2.329\lib\Iot.Device.Button.dll</HintPath>
@@ -43,7 +43,7 @@
       <HintPath>packages\nanoFramework.Iot.Device.CharacterLcd.1.1.246\lib\Iot.Device.CharacterLcd.dll</HintPath>
     </Reference>
     <Reference Include="Iot.Device.Common.WeatherHelper">
-      <HintPath>packages\nanoFramework.Iot.Device.Common.WeatherHelper.1.2.376\lib\Iot.Device.Common.WeatherHelper.dll</HintPath>
+      <HintPath>packages\nanoFramework.Iot.Device.Common.WeatherHelper.1.2.381\lib\Iot.Device.Common.WeatherHelper.dll</HintPath>
     </Reference>
     <Reference Include="Iot.Device.Multiplexing">
       <HintPath>packages\nanoFramework.Iot.Device.Multiplexing.1.2.325\lib\Iot.Device.Multiplexing.dll</HintPath>
@@ -52,7 +52,7 @@
       <HintPath>packages\nanoFramework.Iot.Device.ShiftRegister.1.2.326\lib\Iot.Device.ShiftRegister.dll</HintPath>
     </Reference>
     <Reference Include="Iot.Device.Sht3x">
-      <HintPath>packages\nanoFramework.Iot.Device.Sht3x.1.2.378\lib\Iot.Device.Sht3x.dll</HintPath>
+      <HintPath>packages\nanoFramework.Iot.Device.Sht3x.1.2.384\lib\Iot.Device.Sht3x.dll</HintPath>
     </Reference>
     <Reference Include="mscorlib">
       <HintPath>packages\nanoFramework.CoreLibrary.1.14.2\lib\mscorlib.dll</HintPath>
@@ -64,7 +64,7 @@
       <HintPath>packages\nanoFramework.Graphics.Core.1.1.37\lib\nanoFramework.Graphics.Core.dll</HintPath>
     </Reference>
     <Reference Include="nanoFramework.Hardware.Esp32">
-      <HintPath>packages\nanoFramework.Hardware.Esp32.1.6.3\lib\nanoFramework.Hardware.Esp32.dll</HintPath>
+      <HintPath>packages\nanoFramework.Hardware.Esp32.1.6.8\lib\nanoFramework.Hardware.Esp32.dll</HintPath>
     </Reference>
     <Reference Include="nanoFramework.Hosting">
       <HintPath>packages\nanoFramework.Hosting.1.0.25\lib\nanoFramework.Hosting.dll</HintPath>
@@ -121,22 +121,22 @@
       <HintPath>packages\nanoFramework.System.Threading.1.1.19\lib\System.Threading.dll</HintPath>
     </Reference>
     <Reference Include="UnitsNet.Duration">
-      <HintPath>packages\UnitsNet.nanoFramework.Duration.5.31.0\lib\UnitsNet.Duration.dll</HintPath>
+      <HintPath>packages\UnitsNet.nanoFramework.Duration.5.32.0\lib\UnitsNet.Duration.dll</HintPath>
     </Reference>
     <Reference Include="UnitsNet.ElectricResistance">
-      <HintPath>packages\UnitsNet.nanoFramework.ElectricResistance.5.31.0\lib\UnitsNet.ElectricResistance.dll</HintPath>
+      <HintPath>packages\UnitsNet.nanoFramework.ElectricResistance.5.32.0\lib\UnitsNet.ElectricResistance.dll</HintPath>
     </Reference>
     <Reference Include="UnitsNet.Length">
-      <HintPath>packages\UnitsNet.nanoFramework.Length.5.31.0\lib\UnitsNet.Length.dll</HintPath>
+      <HintPath>packages\UnitsNet.nanoFramework.Length.5.32.0\lib\UnitsNet.Length.dll</HintPath>
     </Reference>
     <Reference Include="UnitsNet.Pressure">
-      <HintPath>packages\UnitsNet.nanoFramework.Pressure.5.31.0\lib\UnitsNet.Pressure.dll</HintPath>
+      <HintPath>packages\UnitsNet.nanoFramework.Pressure.5.32.0\lib\UnitsNet.Pressure.dll</HintPath>
     </Reference>
     <Reference Include="UnitsNet.RelativeHumidity">
-      <HintPath>packages\UnitsNet.nanoFramework.RelativeHumidity.5.31.0\lib\UnitsNet.RelativeHumidity.dll</HintPath>
+      <HintPath>packages\UnitsNet.nanoFramework.RelativeHumidity.5.32.0\lib\UnitsNet.RelativeHumidity.dll</HintPath>
     </Reference>
     <Reference Include="UnitsNet.Temperature">
-      <HintPath>packages\UnitsNet.nanoFramework.Temperature.5.31.0\lib\UnitsNet.Temperature.dll</HintPath>
+      <HintPath>packages\UnitsNet.nanoFramework.Temperature.5.32.0\lib\UnitsNet.Temperature.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
