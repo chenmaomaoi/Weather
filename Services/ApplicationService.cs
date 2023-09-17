@@ -100,7 +100,7 @@ namespace Weather.Services
             device.lcd1602.Write($"{data.BMP280.Temperature.ToString("F1")}\x1 ");
             device.lcd1602.Write($"{data.SHT30.RelativeHumidity.ToString("F1")}% ");
             device.lcd1602.SetCursorPosition(0, 1);
-            device.lcd1602.Write($"{data.BMP280.Pressure.ToString("F1")}hPa ");
+            device.lcd1602.Write($"{data.BMP280.Pressure.ToString("F2")}hPa ");
 
             double hight = WeatherHelper.CalculateAltitude(bmp280result.Pressure, bmp280result.Temperature).Meters;
 

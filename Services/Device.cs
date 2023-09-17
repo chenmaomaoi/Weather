@@ -7,6 +7,7 @@ using Iot.Device.Sht3x;
 using nanoFramework.Hardware.Esp32;
 using Weather.Services.Extensions.DependencyAttribute;
 using System.Device.I2c;
+using Iot.Device.Rtc;
 
 namespace Weather.Services
 {
@@ -47,6 +48,11 @@ namespace Weather.Services
         /// 蓝牙串口
         /// </summary>
         public SerialPort blePort;
+
+        /// <summary>
+        /// DS1307
+        /// </summary>
+        public Ds1307 DS1307;
 
         public Device()
         {
@@ -105,7 +111,11 @@ namespace Weather.Services
 
             //蓝牙串口
             blePort = new SerialPort("COM2", 115200);
-            
+
+            //DS1307
+            DS1307 = new Ds1307(
+                I2cDevice.Create(
+                    new I2cConnectionSettings(1, Ds1307.DefaultI2cAddress, I2cBusSpeed.FastModePlus)));
 
         }
     }
