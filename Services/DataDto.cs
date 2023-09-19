@@ -1,7 +1,11 @@
-﻿namespace Weather.Services
+﻿using System;
+
+namespace Weather.Services
 {
     public class DataDto
     {
+        public DateTime Time { get; set; }
+
         public SHT30Result SHT30 { get; set; }
 
         public BMP280Result BMP280 { get; set; }
@@ -18,6 +22,8 @@
             public float Temperature { get; set; }
 
             public float Pressure { get; set; }
+
+            public float Height { get; set; }
         }
     }
 }

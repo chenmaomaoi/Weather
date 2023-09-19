@@ -2,7 +2,7 @@
 using nanoFramework.DependencyInjection;
 using nanoFramework.Hosting;
 using System.Reflection;
-using Weather.Services.Extensions.DependencyAttribute;
+using Weather.Services.Interfaces;
 
 namespace Weather.Services.Extensions
 {
@@ -14,28 +14,22 @@ namespace Weather.Services.Extensions
 
             //获取所有类型
             Type[] allTypes = Assembly.GetExecutingAssembly().GetTypes();
+
             foreach (Type type in allTypes)
             {
-                if (type.IsClass)
+                switch (type)
                 {
-                    object[] attributes = type.GetCustomAttributes(false);
-
-                    foreach (object attribute in attributes)
-                    {
-                        string attr = attribute.ToString();
-                        if (attr == typeof(HostedDependencyAttribute).FullName)
-                        {
-                            services.AddHostedService(type);
-                        }
-                        else if (attr == typeof(SingletonDependencyAttribute).FullName)
-                        {
-                            services.AddSingleton(type);
-                        }
-                        else if (attr == typeof(TransientDependencyAttribute).FullName)
-                        {
-                            services.AddTransient(type);
-                        }
-                    }
+                    case IHostedService:
+                        services.AddHostedService(type);
+                        break;
+                    case ISingletonService:
+                        services.AddSingleton(type);
+                        break;
+                    case ITransientService:
+                        services.AddTransient(type);
+                        break;
+                    default:
+                        break;
                 }
             }
             return services;

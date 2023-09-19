@@ -24,13 +24,9 @@
     <Compile Include="Services\ApplicationService.cs" />
     <Compile Include="Services\DataDto.cs" />
     <Compile Include="Services\Device.cs" />
-    <Compile Include="Services\Extensions\DependencyAttribute\HostedDependencyAttribute.cs" />
-    <Compile Include="Services\Extensions\DependencyAttribute\SingletonDependencyAttribute.cs" />
-    <Compile Include="Services\Extensions\DependencyAttribute\TransientDependencyAttribute.cs" />
     <Compile Include="Services\Extensions\ServiceCollectionExtensions.cs" />
-    <Compile Include="Services\LEDBlinkService.cs" />
-    <Compile Include="Services\OnBoardButtonService.cs" />
-    <Compile Include="Settings.cs" />
+    <Compile Include="Services\Interfaces\ISingletonService.cs" />
+    <Compile Include="Services\Interfaces\ITransientService.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Iot.Device.Bmxx80">
@@ -39,23 +35,14 @@
     <Reference Include="Iot.Device.Button">
       <HintPath>packages\nanoFramework.Iot.Device.Button.1.2.329\lib\Iot.Device.Button.dll</HintPath>
     </Reference>
-    <Reference Include="Iot.Device.CharacterLcd">
-      <HintPath>packages\nanoFramework.Iot.Device.CharacterLcd.1.1.246\lib\Iot.Device.CharacterLcd.dll</HintPath>
-    </Reference>
     <Reference Include="Iot.Device.Common.NumberHelper">
       <HintPath>packages\nanoFramework.Iot.Device.Common.NumberHelper.1.2.325\lib\Iot.Device.Common.NumberHelper.dll</HintPath>
     </Reference>
     <Reference Include="Iot.Device.Common.WeatherHelper">
       <HintPath>packages\nanoFramework.Iot.Device.Common.WeatherHelper.1.2.381\lib\Iot.Device.Common.WeatherHelper.dll</HintPath>
     </Reference>
-    <Reference Include="Iot.Device.Multiplexing">
-      <HintPath>packages\nanoFramework.Iot.Device.Multiplexing.1.2.325\lib\Iot.Device.Multiplexing.dll</HintPath>
-    </Reference>
     <Reference Include="Iot.Device.Rtc">
       <HintPath>packages\nanoFramework.Iot.Device.Rtc.1.2.384\lib\Iot.Device.Rtc.dll</HintPath>
-    </Reference>
-    <Reference Include="Iot.Device.ShiftRegister">
-      <HintPath>packages\nanoFramework.Iot.Device.ShiftRegister.1.2.326\lib\Iot.Device.ShiftRegister.dll</HintPath>
     </Reference>
     <Reference Include="Iot.Device.Sht3x">
       <HintPath>packages\nanoFramework.Iot.Device.Sht3x.1.2.384\lib\Iot.Device.Sht3x.dll</HintPath>
@@ -77,9 +64,6 @@
     </Reference>
     <Reference Include="nanoFramework.Json">
       <HintPath>packages\nanoFramework.Json.2.2.99\lib\nanoFramework.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="nanoFramework.ResourceManager">
-      <HintPath>packages\nanoFramework.ResourceManager.1.2.13\lib\nanoFramework.ResourceManager.dll</HintPath>
     </Reference>
     <Reference Include="nanoFramework.Runtime.Events">
       <HintPath>packages\nanoFramework.Runtime.Events.1.11.6\lib\nanoFramework.Runtime.Events.dll</HintPath>
@@ -108,6 +92,9 @@
     <Reference Include="System.Device.Spi">
       <HintPath>packages\nanoFramework.System.Device.Spi.1.3.37\lib\System.Device.Spi.dll</HintPath>
     </Reference>
+    <Reference Include="System.Device.Wifi">
+      <HintPath>packages\nanoFramework.System.Device.Wifi.1.5.54\lib\System.Device.Wifi.dll</HintPath>
+    </Reference>
     <Reference Include="System.Diagnostics.Stopwatch">
       <HintPath>packages\nanoFramework.System.Diagnostics.Stopwatch.1.2.325\lib\System.Diagnostics.Stopwatch.dll</HintPath>
     </Reference>
@@ -122,6 +109,9 @@
     </Reference>
     <Reference Include="System.Math">
       <HintPath>packages\nanoFramework.System.Math.1.5.29\lib\System.Math.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net">
+      <HintPath>packages\nanoFramework.System.Net.1.10.52\lib\System.Net.dll</HintPath>
     </Reference>
     <Reference Include="System.Threading">
       <HintPath>packages\nanoFramework.System.Threading.1.1.19\lib\System.Threading.dll</HintPath>
