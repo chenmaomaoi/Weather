@@ -17,19 +17,36 @@ namespace Weather.Services.Extensions
 
             foreach (Type type in allTypes)
             {
-                switch (type)
+                if (!type.IsClass)
                 {
-                    case IHostedService:
-                        services.AddHostedService(type);
+                    continue;
+                }
+
+                foreach (Type item in type.GetInterfaces())
+                {
+                    bool flag = false;
+                    switch (item.Name)
+                    {
+                        case nameof(IHostedService):
+                            services.AddHostedService(type);
+                            flag = true;
+                            break;
+                        case nameof(ISingletonService):
+                            services.AddSingleton(type);
+                            flag = true;
+                            break;
+                        case nameof(ITransientService):
+                            services.AddTransient(type);
+                            flag = true;
+                            break;
+                        default:
+                            break;
+                    }
+
+                    if (flag)
+                    {
                         break;
-                    case ISingletonService:
-                        services.AddSingleton(type);
-                        break;
-                    case ITransientService:
-                        services.AddTransient(type);
-                        break;
-                    default:
-                        break;
+                    }
                 }
             }
             return services;

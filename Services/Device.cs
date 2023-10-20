@@ -5,7 +5,6 @@ using Iot.Device.Sht3x;
 using nanoFramework.Hardware.Esp32;
 using System.Device.I2c;
 using Iot.Device.Rtc;
-using Iot.Device.Button;
 using Weather.Services.Interfaces;
 
 namespace Weather.Services
@@ -25,7 +24,7 @@ namespace Weather.Services
         /// <summary>
         /// BLE连接状态
         /// </summary>
-        public GpioButton bleState;
+        public GpioPin bleState;
 
         /// <summary>
         /// 蓝牙串口
@@ -52,7 +51,7 @@ namespace Weather.Services
             #region 串口BLE
             Configuration.SetPinFunction(GPIOConfigs.BLE_RX, DeviceFunction.COM2_RX);
             Configuration.SetPinFunction(GPIOConfigs.BLE_TX, DeviceFunction.COM2_TX);
-            bleState = new GpioButton(GPIOConfigs.BLE_State, pinMode: PinMode.Input);
+            bleState = new GpioController().OpenPin(GPIOConfigs.BLE_State, PinMode.Input);
             blePort = new SerialPort("COM2", 115200);
             #endregion
 

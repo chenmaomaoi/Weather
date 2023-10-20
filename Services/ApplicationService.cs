@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Device.Gpio;
 using System.Threading;
 using Iot.Device.Bmxx80;
 using Iot.Device.Bmxx80.ReadResult;
@@ -8,6 +9,7 @@ using nanoFramework.Hosting;
 using nanoFramework.Json;
 using nanoFramework.Networking;
 using nanoFramework.Runtime.Native;
+using static Weather.Services.DataDto;
 
 namespace Weather.Services
 {
@@ -19,11 +21,9 @@ namespace Weather.Services
         {
             this.device = device;
 
-            device.bleState.ButtonDown += (object sender, EventArgs e) => this.Start();
-            device.bleState.ButtonUp += (object sender, EventArgs e) => this.Stop();
-            this.Stop();
-
             Rtc.SetSystemTime(device.DS1307.DateTime);
+
+            base.Start();
         }
 
         /// <summary>
@@ -55,9 +55,12 @@ namespace Weather.Services
             }
         }
 
-        public override void Start()
+        private void start()
         {
-            base.Start();
+            if (device.blePort.IsOpen)
+            {
+                return;
+            }
 
             device.bmp280.TemperatureSampling = Sampling.UltraHighResolution;
             device.bmp280.PressureSampling = Sampling.UltraHighResolution;
@@ -69,9 +72,12 @@ namespace Weather.Services
             device.blePort.Open();
         }
 
-        public override void Stop()
+        private void stop()
         {
-            base.Stop();
+            if (!device.blePort.IsOpen)
+            {
+                return;
+            }
 
             device.bmp280.TemperatureSampling = Sampling.UltraLowPower;
             device.bmp280.PressureSampling = Sampling.UltraLowPower;
@@ -84,18 +90,25 @@ namespace Weather.Services
 
         protected override void ExecuteAsync()
         {
+            if (device.bleState.Read() == PinValue.Low)
+            {
+                this.stop();
+                return;
+            }
+
+            this.start();
             //蓝牙已连接，发送数据
             Bmp280ReadResult bmp280result = device.bmp280.Read();
-            DataDto data = new()
+            DataDto data = new DataDto()
             {
                 Time = DateTime.UtcNow,
-                BMP280 = new()
+                BMP280 = new BMP280Result()
                 {
                     Temperature = (float)bmp280result.Temperature.DegreesCelsius,
                     Pressure = (float)bmp280result.Pressure.Hectopascals,
                     Height = (float)WeatherHelper.CalculateAltitude(bmp280result.Pressure, bmp280result.Temperature).Meters
                 },
-                SHT30 = new DataDto.SHT30Result()
+                SHT30 = new SHT30Result()
                 {
                     Temperature = (float)device.sht30.Temperature.DegreesCelsius,
                     RelativeHumidity = (float)device.sht30.Humidity.Percent
