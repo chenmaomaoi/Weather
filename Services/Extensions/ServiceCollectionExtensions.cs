@@ -1,5 +1,5 @@
 ﻿using System;
-using nanoFramework.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 using nanoFramework.Hosting;
 using System.Reflection;
 using Weather.Services.Interfaces;
